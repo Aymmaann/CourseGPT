@@ -2,9 +2,10 @@ import React, { useContext, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import { Context } from '../context/CourseContext'
 import Navbar from '../components/Navbar'
+import ModuleDetails from '../components/ModuleDetails'
 
-const Course = ({ topic, modules }) => {
-  const { loading } = useContext(Context)
+const Course = () => {
+  const { modules, loading, moduleContent } = useContext(Context)
 
   useEffect(() => {
     const storedModules = localStorage.getItem('modules');
@@ -20,7 +21,9 @@ const Course = ({ topic, modules }) => {
         {loading? (
           <p>Loading...</p>
         ) : (
-          <p>Module Content</p>
+          <div className='p-5 mb-10'>
+            <ModuleDetails moduleData={moduleContent} />
+          </div>
         )}
       </div>
     </div>

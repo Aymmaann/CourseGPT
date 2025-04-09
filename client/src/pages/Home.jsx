@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Context } from '../context/CourseContext'
 
 const Home = () => {
-  const { topic, setTopic, lesson, setLesson, loading, setLoading, modules, setModules, extractModules } = useContext(Context);
+  const { topic, setTopic, lesson, setLesson, loading, setLoading, modules, setModules, setModuleContent, extractModules } = useContext(Context);
   const [title, setTitle] = useState('')
   const navigate = useNavigate()
 
@@ -12,6 +12,7 @@ const Home = () => {
     e.preventDefault()
     console.log("Title: ", title)
     setTopic(title)
+    localStorage.setItem('topic', title);
     try {
         setLoading(true)
         const response = await fetch('http://localhost:8001/api/generateLearningOutcomes', {
@@ -33,8 +34,33 @@ const Home = () => {
     }
   }
 
+  const handleModuleClick = async(module) => {
+    try {
+      setLoading(true)
+      console.log("Topic: ", topic)
+      console.log("Module: ", module)
+      const response = await fetch('http://localhost:8001/api/generateModuleContent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic, module })
+      })
+      const data = await response.json()
+      setModuleContent(data.content)
+    } catch(error) {
+      console.error("Error fetching data: ", error)
+    }
+    setLoading(false)
+  };
+
   const goToCourse = () => {
-    navigate('/course')
+    if(topic) {
+        handleModuleClick(modules[0]); 
+        navigate('/course');
+    } else {
+        console.warn("Topic not yet available, cannot navigate to course.");
+    }
   }
 
   useEffect(() => {
@@ -43,7 +69,13 @@ const Home = () => {
       setModules(JSON.parse(storedModules));
       console.log('Modules loaded from localStorage:', JSON.parse(storedModules));
     }
-  }, [setModules]);
+
+    const storedTopic = localStorage.getItem('topic');
+    if (storedTopic) {
+      setTopic(storedTopic);
+      console.log('Topic loaded from localStorage:', storedTopic);
+    }
+  }, [setModules, setTopic]);
 
 
   useEffect(() => {

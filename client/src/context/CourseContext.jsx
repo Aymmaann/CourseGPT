@@ -7,11 +7,11 @@ const CourseContextProvider = ({children}) => {
     const [topic, setTopic] = useState('')
     const [modules, setModules] = useState([])
     const [lesson, setLesson] = useState('')
+    const [moduleContent, setModuleContent] = useState('')
     const [loading, setLoading] = useState(false)
 
     const extractModules = (content) => {
         const modulesSection = content.split("**Course Modules:**")[1];
-        
         if (!modulesSection) {
           console.log("No modules section found");
           return [];
@@ -36,6 +36,7 @@ const CourseContextProvider = ({children}) => {
             modules, setModules,
             lesson, setLesson,
             loading, setLoading,
+            moduleContent, setModuleContent,
             extractModules
          }}
         >

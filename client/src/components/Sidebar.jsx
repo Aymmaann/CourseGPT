@@ -4,23 +4,41 @@ import assets from '../assets/assets.js';
 import { Context } from '../context/CourseContext.jsx';
 
 const Sidebar = () => {
-  const { topic } = useContext(Context);
+  const { topic, setTopic, moduleContent, setModuleContent, setLoading } = useContext(Context);
   const [activeModule, setActiveModule] = useState(null);
+
   const modules = JSON.parse(localStorage.getItem('modules')) || [];
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem('user-info')
-    navigate("/login")
+    navigate("/home")
   }
 
   const handleModuleClick = async(module) => {
     setActiveModule(module); 
+    console.log("Before topic: ", localStorage.getItem('topic'))
     try {
       setLoading(true)
+      if(topic === '') {
+        setTopic(localStorage.getItem('topic'));
+      }
+      console.log("Topic: ", topic)
+      console.log("Module: ", module)
+      const title = localStorage.getItem('topic')
+      const response = await fetch('http://localhost:8001/api/generateModuleContent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic: title, module })
+      })
+      const data = await response.json()
+      setModuleContent(data.content)
+      console.log(data)
     } catch(error) {
       console.error("Error fetching data: ", error)
     }
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -61,11 +79,11 @@ const Sidebar = () => {
             </div>
         </div>
         
-        <div className='flex items-center gap-2 p-1.5 rounded-lg cursor-pointer' onClick={handleLogout}>
+        <div className='flex items-center p-1.5 rounded-lg cursor-pointer' onClick={handleLogout}>
             <div className="p-2 rounded-md">
                 <assets.IoMdLogOut className="text-[18px]" />
             </div>
-            <p className="text-sm font-semibold">Log out</p>
+            <p className="text-sm font-semibold">Home</p>
         </div>
     </div> 
   )
