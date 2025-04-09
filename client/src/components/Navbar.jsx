@@ -17,7 +17,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='relative flex items-center justify-between py-2.5 px-4 text-zinc-300 bg-darkBlue rounded-xl'>
+    <div className='relative flex items-center justify-between py-2.5 px-4 text-zinc-300 bg-darkBlue'>
         <div className='flex gap-3 items-center'>
             <img src={assets.pfp} className='w-[40px] rounded-full border border-1 border-violet ' />
             <p className=''>{JSON.parse(localStorage.getItem('user')).name || JSON.parse(localStorage.getItem('user')).email}</p>

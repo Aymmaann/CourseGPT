@@ -8,3 +8,7 @@
     font-family: "Plus Jakarta Sans", serif;
     box-sizing: border-box;
 }
+
+.smoothTransition {
+    transition: 0.2s ease-in-out;
+  }

@@ -62,7 +62,7 @@ const Login = () => {
             <div className='mt-32 flex justify-center'>
               <div className='min-w-[300px]'>
                 <p className='text-3xl font-medium inline-block'>Welcome back!</p>
-                <p className='text-xs font-light text-zinc-400 mt-2'>Smarter Insights for Your Crypto Journey</p>
+                <p className='text-xs font-light text-zinc-400 mt-2'>Pick Up Where You Left Off and Keep Learning</p>
 
                 <form onSubmit={handleLogin}>
                   <p className='text-sm ml-1 mt-8'>Email</p>
@@ -103,8 +103,8 @@ const Login = () => {
           {/* Right Side */}
           <div className='w-1/2 h-screen bg-[#000000] relative text-center'>
               <div className='z-10 absolute left-1/2 -translate-x-1/2 w-full'>
-                <p className='text-[40px] mt-24 text-zinc-300 z-10'>Every tick matters</p>
-                <p className='text-[40px] bg-gradient-to-b from-zinc-400 to-zinc-700 bg-clip-text text-transparent z-10'>Monitor the market in real time.</p>
+                <p className='text-[40px] mt-24 text-zinc-300 z-10'>Every step counts</p>
+                <p className='text-[40px] bg-gradient-to-b from-zinc-400 to-zinc-700 bg-clip-text text-transparent z-10'>Track your learning in real time.</p>
               </div>
               <img src={assets.loginImg} className='absolute w-full bottom-0 z-0' alt="" />
           </div>
