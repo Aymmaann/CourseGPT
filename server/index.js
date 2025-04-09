@@ -2,12 +2,12 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import generateLessonFromAPI from './controllers/CourseController.js';
+import { generateLessonFromAPI, generateModuleFromAPI } from './controllers/CourseController.js';
 
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:5173',
   methods: 'POST, GET, OPTIONS', 
   allowedHeaders: 'Content-Type', 
 }));
@@ -30,13 +30,13 @@ app.post('/api/generateLearningOutcomes', async (req, res) => {
 });
 
 
-app.post('/api/generateModule', async (req,res) => {
+app.post('/api/generateModuleContent', async (req,res) => {
   const { topic, module } = req.body;
   if(!topic || !module) {
     return res.status(400).json({ error: 'Topic is required' });
   } 
   try {
-    const moduleContent = await generateModuleFromAPI(topic, moduleName);
+    const moduleContent = await generateModuleFromAPI(topic, module);
     res.json({ content: moduleContent });
   } catch(error) {
     console.error("Error generating module: ", error);

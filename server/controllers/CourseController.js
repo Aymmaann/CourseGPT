@@ -6,7 +6,7 @@ dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-const generateLessonFromAPI = async (topic) => {
+export const generateLessonFromAPI = async (topic) => {
     const prompt = `Generate the initial information for a course on the topic of "${topic}". Please ensure the output adheres to the following format:
 
     **Course Title:** [Compelling Course Title]
@@ -40,4 +40,60 @@ const generateLessonFromAPI = async (topic) => {
     }
 };
 
-export default generateLessonFromAPI;
+
+export const generateModuleFromAPI = async (topic, moduleName) => {
+  const prompt = `Generate detailed and comprehensive content for the module "${moduleName}" within the course "${topic}". Please format your response as a JSON object with the following keys:
+    {
+      "moduleTitle": "[Compelling Title for ${moduleName}]",
+      "moduleDescription": "[Concise Description of ${moduleName}]",
+      "learningOutcomes": [
+        "[Learning Outcome 1 for ${moduleName}]",
+        "[Learning Outcome 2 for ${moduleName}]",
+        "[Learning Outcome 3 for ${moduleName}]"
+      ],
+      "mainContent": "[Detailed and comprehensive content for the module '${moduleName}'. Use markdown formatting extensively to structure this content with headings (## Subheadings, ### Sub-subheadings), bold text (**important**), italic text (*emphasis*), bullet points (* item), numbered lists (1. item), code blocks (using backticks \`\`\`), and any other relevant markdown to make it well-organized and readable.]",
+      "keyConcepts": [
+        {"term": "[Key Term 1 for ${moduleName}]", "definition": "[Brief Definition 1]"},
+        {"term": "[Key Term 2 for ${moduleName}]", "definition": "[Brief Definition 2]"}
+      ],
+      "examples": [
+        {"title": "[Example 1 Title for ${moduleName}]", "description": "[Description of Example 1]", "code": "[Optional Code for Example 1]"},
+        {"title": "[Example 2 Title for ${moduleName}]", "description": "[Description of Example 2]", "code": "[Optional Code for Example 2]"}
+      ],
+      "activities": [
+        {"title": "[Engaging Activity 1 for ${moduleName}]", "description": "[Instructions for Activity 1]"},
+        {"title": "[Interactive Activity 2 for ${moduleName}]", "description": "[Instructions for Activity 2]"}
+      ]
+    }
+
+  Ensure the entire response is a valid JSON object. The content for 'mainContent' should be rich and detailed, utilizing markdown for structure and readability. Include relevant learning outcomes, key concepts, examples, and activities that are specific to the module '${moduleName}' within the context of the course on '${topic}'.`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    let responseText = result.response.candidates[0].content.parts[0].text;
+
+    if (responseText.startsWith("```json")) {
+      responseText = responseText.substring("```json".length).trimStart();
+    }
+    if (responseText.endsWith("```")) {
+      responseText = responseText.substring(0, responseText.length - "```".length).trimEnd();
+    }
+
+    try {
+      const parsedJSON = JSON.parse(responseText);
+      return parsedJSON;
+    } catch (error) {
+      console.error("Error parsing module JSON:", error);
+      console.error("Raw response text:", responseText);
+      return { error: "Failed to parse module content" };
+    }
+  } catch(error) {
+    console.error("Module API Error: ", error);
+    throw error;
+  }
+};
+
+export default { 
+  generateLessonFromAPI,
+  generateModuleFromAPI
+};
