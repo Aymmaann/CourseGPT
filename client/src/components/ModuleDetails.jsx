@@ -7,6 +7,9 @@ const ModuleDetails = ({ moduleData }) => {
   const [edit, setEdit] = useState(false)
   const moduleContent = localStorage.getItem('module-content')
   const [localContent, setLocalContent] = useState(moduleContent?.mainContent || '')
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
 
   if(!moduleData) {
     return (
@@ -32,6 +35,26 @@ const ModuleDetails = ({ moduleData }) => {
     moduleData.mainContent = localContent;
     setEdit(false)
   }
+
+  const handleQuizAnswer = (questionIndex, answer) => {
+    setQuizAnswers({
+      ...quizAnswers,
+      [questionIndex]: answer,
+    });
+  };
+
+  const submitQuiz = () => {
+    let correctCount = 0;
+    if (moduleData.quiz) {
+      moduleData.quiz.forEach((question, index) => {
+        if (quizAnswers[index] === question.correctAnswer) {
+          correctCount++;
+        }
+      });
+      setScore(correctCount);
+      setShowScore(true);
+    }
+  };
 
   return (
     <div className="module-details p-5 pt-0">
@@ -106,7 +129,7 @@ const ModuleDetails = ({ moduleData }) => {
             </div>
         )}
 
-          {moduleData.resources && moduleData.resources.length > 0 && (
+        {moduleData.resources && moduleData.resources.length > 0 && (
             <div className="mb-4">
                 <h2 className="text-lg font-semibold mb-2 text-zinc-100">Further Resources</h2>
                 <ul className="list-disc list-inside text-zinc-300">
@@ -124,7 +147,50 @@ const ModuleDetails = ({ moduleData }) => {
                     ))}
                 </ul>
             </div>
-          )}
+        )}
+
+        {moduleData.quiz && moduleData.quiz.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-semibold mb-4 text-zinc-100">Module Quiz</h2>
+              <form onSubmit={(e) => e.preventDefault()}>
+                {moduleData.quiz.map((question, index) => (
+                  <div key={index} className="mb-6">
+                    <p className="text-zinc-300 mb-2"><strong className="text-zinc-100">{index + 1}.</strong> {question.question}</p>
+                    <div className="ml-4">
+                      {question.options.map((option, optionIndex) => (
+                        <div key={optionIndex} className="mb-2">
+                          <label className="inline-flex items-center text-zinc-300">
+                            <input
+                              type="radio"
+                              className="form-radio mr-2 cursor-pointer"
+                              name={`question-${index}`}
+                              value={option}
+                              onChange={(e) => handleQuizAnswer(index, e.target.value)}
+                              checked={quizAnswers[index] === option}
+                            />
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="py-2 px-4 bg-zinc-200 text-[#262063] rounded-md smoothTransition cursor-pointer font-medium text-sm hover:bg-zinc-300"
+                  onClick={submitQuiz}
+                >
+                  Submit Quiz
+                </button>
+
+                {showScore && (
+                  <div className="mt-4 text-lg text-green-400">
+                    Your Score: {score} / {moduleData.quiz.length}
+                  </div>
+                )}
+              </form>
+            </div>
+        )}
         </div>
       ) : (
         <form
