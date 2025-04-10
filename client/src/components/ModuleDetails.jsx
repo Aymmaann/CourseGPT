@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Context } from '../context/CourseContext'
+import Toast from './Toast'
 
 const ModuleDetails = ({ moduleData }) => {
   const { setModuleContent } = useContext(Context)
@@ -10,6 +11,17 @@ const ModuleDetails = ({ moduleData }) => {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
+  const [toastMessage, setToastMessage] = useState({
+    isShown: false,
+    message: "",
+  })
+
+  const handleCloseToast = () => {
+    setToastMessage({
+        isShown: false,
+        message: ""
+    })
+  }
 
   if(!moduleData) {
     return (
@@ -34,6 +46,10 @@ const ModuleDetails = ({ moduleData }) => {
     localStorage.setItem('module-content', JSON.stringify(updatedModule));
     moduleData.mainContent = localContent;
     setEdit(false)
+    setToastMessage({
+        isShown: true,
+        message: "Changes saved successfully!",
+    });
   }
 
   const handleQuizAnswer = (questionIndex, answer) => {
@@ -58,74 +74,81 @@ const ModuleDetails = ({ moduleData }) => {
 
   return (
     <div className="module-details p-5 pt-0">
-      <button className='my-6 py-2 px-4 bg-zinc-200 text-[#262063] rounded-md smoothTransition cursor-pointer font-medium text-sm hover:bg-zinc-300'
+      {/* <button className='my-6 py-2 px-4 bg-zinc-200 text-[#262063] rounded-md smoothTransition cursor-pointer font-medium text-sm hover:bg-zinc-300'
               onClick={() => setEdit(!edit)}
       > 
         {!edit? 'Edit content' : 'Go back to view'}
-      </button>
+      </button> */}
       {!edit? (
         <div>
-            <h1 className="text-2xl font-semibold mb-4 text-zinc-100">{moduleData.moduleTitle}</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-zinc-100">{moduleData.moduleTitle}</h1>
       <p className="text-zinc-300 mb-3">{moduleData.moduleDescription}</p>
 
-      {moduleData.learningOutcomes && moduleData.learningOutcomes.length > 0 && (
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2 text-zinc-100">Learning Outcomes</h2>
-            <ul className="list-disc list-inside text-zinc-300">
-                {moduleData.learningOutcomes.map((outcome, index) => (
-                <li key={index}>{outcome}</li>
-                ))}
-            </ul>
+        {moduleData.learningOutcomes && moduleData.learningOutcomes.length > 0 && (
+            <div className="mb-4">
+                <h2 className="text-lg font-semibold mb-2 text-zinc-100">Learning Outcomes</h2>
+                <ul className="list-disc list-inside text-zinc-300">
+                    {moduleData.learningOutcomes.map((outcome, index) => (
+                    <li key={index}>{outcome}</li>
+                    ))}
+                </ul>
             </div>
         )}
 
         {moduleData.mainContent && (
             <div className="mb-4 text-zinc-300">
-            <h2 className="text-lg font-semibold mb-2 text-zinc-100">Module Content</h2>
-            <ReactMarkdown>{moduleData.mainContent}</ReactMarkdown>
+                <div className='flex items-center gap-4'>
+                    <h2 className="text-lg font-semibold text-zinc-100">Module Content</h2>
+                    <button className='my-3 py-2 px-4 bg-zinc-200 text-[#262063] rounded-md smoothTransition cursor-pointer font-medium text-sm hover:bg-zinc-300'
+                            onClick={() => setEdit(!edit)}
+                    > 
+                        {!edit? 'Edit content' : 'Go back to view'}
+                    </button>
+                </div>
+                <ReactMarkdown>{moduleData.mainContent}</ReactMarkdown>
             </div>
         )}
 
         {moduleData.keyConcepts && moduleData.keyConcepts.length > 0 && (
             <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2 text-zinc-100">Key Concepts</h2>
-            <ul className="list-disc list-inside text-zinc-300">
-                {moduleData.keyConcepts.map((concept, index) => (
-                <li key={index}>
-                    <strong className="text-zinc-100">{concept.term}:</strong> {concept.definition}
-                </li>
-                ))}
-            </ul>
+                <h2 className="text-lg font-semibold mb-2 text-zinc-100">Key Concepts</h2>
+                <ul className="list-disc list-inside text-zinc-300">
+                    {moduleData.keyConcepts.map((concept, index) => (
+                    <li key={index}>
+                        <strong className="text-zinc-100">{concept.term}:</strong> {concept.definition}
+                    </li>
+                    ))}
+                </ul>
             </div>
         )}
 
         {moduleData.examples && moduleData.examples.length > 0 && (
             <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2 text-zinc-100">Examples</h2>
-            {moduleData.examples.map((example, index) => (
-                <div key={index} className="mb-3 p-3 rounded-md bg-[#1a1f37]">
-                <h3 className="text-md font-semibold mb-1 text-zinc-100">{example.title}</h3>
-                <p className="text-zinc-300">{example.description}</p>
-                {example.code && (
-                    <pre className="rounded-md bg-darkGray text-zinc-300 p-3 mt-2 overflow-auto">
-                    <code>{example.code}</code>
-                    </pre>
-                )}
-                </div>
-            ))}
+                <h2 className="text-lg font-semibold mb-2 text-zinc-100">Examples</h2>
+                {moduleData.examples.map((example, index) => (
+                    <div key={index} className="mb-3 p-3 rounded-md bg-[#1a1f37]">
+                        <h3 className="text-md font-semibold mb-1 text-zinc-100">{example.title}</h3>
+                        <p className="text-zinc-300">{example.description}</p>
+                        {example.code && (
+                            <pre className="rounded-md bg-darkGray text-zinc-300 p-3 mt-2 overflow-auto">
+                            <code>{example.code}</code>
+                            </pre>
+                        )}
+                    </div>
+                ))}
             </div>
         )}
 
         {moduleData.activities && moduleData.activities.length > 0 && (
             <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2 text-zinc-100">Activities</h2>
-            <ul className="list-decimal list-inside text-zinc-300">
-                {moduleData.activities.map((activity, index) => (
-                <li key={index}>
-                    <strong className="text-zinc-100">{activity.title}:</strong> {activity.description}
-                </li>
-                ))}
-            </ul>
+                <h2 className="text-lg font-semibold mb-2 text-zinc-100">Activities</h2>
+                <ul className="list-decimal list-inside text-zinc-300">
+                    {moduleData.activities.map((activity, index) => (
+                    <li key={index}>
+                        <strong className="text-zinc-100">{activity.title}:</strong> {activity.description}
+                    </li>
+                    ))}
+                </ul>
             </div>
         )}
 
@@ -210,8 +233,11 @@ const ModuleDetails = ({ moduleData }) => {
             </button>
         </form>
       )}
-      {console.log('moduleContent:', moduleContent)}
-      {console.log('mainContent:', moduleData.mainContent)}
+      <Toast
+            isShown={toastMessage.isShown}
+            message={toastMessage.message}
+            onClose={handleCloseToast}
+      />
     </div>
   );
 }

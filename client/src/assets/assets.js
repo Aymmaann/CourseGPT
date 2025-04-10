@@ -7,6 +7,7 @@ import { MdSpatialTracking } from "react-icons/md";
 import { FaBell } from "react-icons/fa";
 import { FaReact } from "react-icons/fa";
 import { SiWebpack } from "react-icons/si";
+import { LuCheck } from "react-icons/lu";
 
 // Images
 import noBgLogo from './images/no-bg-logo.png';
@@ -24,6 +25,7 @@ const assets = {
     FaBell,
     FaReact,
     SiWebpack,
+    LuCheck,
 
     // Images
     noBgLogo,
