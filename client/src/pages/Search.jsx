@@ -18,12 +18,15 @@ const Search = () => {
     localStorage.setItem('topic', title);
     try {
         setLoading(true)
+        if(estimatedTime === '') {
+            setEstimatedTime('1')
+        }
         const response = await fetch('http://localhost:8001/api/generateLearningOutcomes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ topic: title })
+            body: JSON.stringify({ topic: title, difficulty, estimatedTime })
         })
         const data = await response.json()
         setLoading(false)
@@ -39,18 +42,16 @@ const Search = () => {
     const handleModuleClick = async(module) => {
     try {
         setLoading(true)
-        if(estimatedTime === '') {
-            setEstimatedTime('1')
-        }
         const response = await fetch('http://localhost:8001/api/generateModuleContent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ topic, module, difficulty, estimatedTime })
+            body: JSON.stringify({ topic, module })
         })
         const data = await response.json()
         setModuleContent(data.content)
+        localStorage.setItem('module-content', data.content);
     } catch(error) {
         console.error("Error fetching data: ", error)
     }
@@ -59,8 +60,6 @@ const Search = () => {
 
     const goToCourse = () => {
         if(topic && modules.length > 0) { 
-            localStorage.setItem('topic', topic); 
-            localStorage.setItem('modules', JSON.stringify(modules)); 
             handleModuleClick(modules[0]);
             navigate('/course');
         } else {
@@ -120,17 +119,6 @@ const Search = () => {
 
         <div className="p-6 max-w-4xl mx-auto">
             <form onSubmit={handleSubmit} className="mb-6 flex justify-center">
-                {/* <div className="flex gap-2 bg-zinc-100 rounded-md">
-                    <input type="text"
-                        placeholder='Enter a topic...' 
-                        value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
-                        className='outline-none px-3 py-2 rounded-md flex-grow bg-transparent text-darkGray' 
-                    />
-                    <button type='submit' className=' bg-violet px-5 py-2 rounded-r-md cursor-pointer text-white  hover:bg-violet hover:text-zinc-900 smoothTransition'>
-                        Submit
-                    </button>
-                </div> */}
                 <div className="flex flex-col gap-2 bg-zinc-300 opacity-90 rounded-md p-4 w-[500px]">
                     <input
                         type="text"
@@ -140,7 +128,7 @@ const Search = () => {
                         className='outline-none px-3 py-2 rounded-md bg-white text-darkGray'
                     />
                     <div className='flex items-center gap-3 mt-4'>
-                        <label htmlFor="difficulty" className="block text-sm font-light text-darkGray">Difficulty:</label>
+                        <label htmlFor="difficulty" className="block text-sm text-darkGray">Difficulty:</label>
                         <select
                             id="difficulty"
                             value={difficulty}
@@ -153,7 +141,7 @@ const Search = () => {
                         </select>
                     </div>
                     <div className='flex items-center gap-3 mt-4'>
-                        <label htmlFor="estimatedTime" className="block text-sm font-light text-darkGray">Estimated Completion (hours):</label>
+                        <label htmlFor="estimatedTime" className="block text-sm text-darkGray">Estimated Completion (hours):</label>
                         <input
                             type="number"
                             id="estimatedTime"
@@ -181,6 +169,9 @@ const Search = () => {
                 ) : lesson ? (
                     <div className="lesson-content bg-violet text-darkGray p-6 rounded-lg shadow">
                         <h2 className='text-2xl font-semibold mb-4'>Lesson Content</h2>
+                        <p className='text-sm  mb-2'>
+                            (The content might render in Markdown format on first load. If it's not rendered correctly, please click the 'Submit' button again.)
+                        </p>
                         <div className="prose max-w-none">
                             <ReactMarkdown>
                                 {lesson}

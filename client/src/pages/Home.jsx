@@ -125,7 +125,7 @@ const Home = () => {
           </Link>
         </div>
 
-        <div className='mt-20'>
+        <div className='mt-16'>
           <p className='text-2xl font-semibold'>Why CourseGPT?</p>
           <div className='flex-col items-center mt-7'>
             <div className='flex justify-between items-center text-sm w-full'>

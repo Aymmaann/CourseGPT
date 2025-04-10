@@ -16,7 +16,6 @@ const Sidebar = () => {
 
   const handleModuleClick = async(module) => {
     setActiveModule(module); 
-    console.log("Before topic: ", localStorage.getItem('topic'))
     try {
       setLoading(true)
       if(topic === '') {
@@ -34,7 +33,7 @@ const Sidebar = () => {
       })
       const data = await response.json()
       setModuleContent(data.content)
-      console.log(data)
+      localStorage.setItem('module-content', data.content);
     } catch(error) {
       console.error("Error fetching data: ", error)
     }
