@@ -73,10 +73,37 @@ export const generateModuleFromAPI = async (topic, moduleName) => {
         {"title": "[Practice Resource Title 1]", "description": "[Brief Description or Link 1]"},
         {"title": "[Reference Material Title 1]", "description": "[Brief Description or Link 2]"},
         {"title": "[Interactive Exercise Title 1]", "description": "[Brief Description or Link 3]"}
+      ],
+      "quiz": [
+        {
+          "question": "[Question 1 related to ${moduleName}]",
+          "options": ["[Option A]", "[Option B]", "[Option C]", "[Option D]"],
+          "correctAnswer": "[Correct Option - e.g., Option B]"
+        },
+        {
+          "question": "[Question 2 related to ${moduleName}]",
+          "options": ["[Option A]", "[Option B]", "[Option C]", "[Option D]"],
+          "correctAnswer": "[Correct Option - e.g., Option C]"
+        },
+        {
+          "question": "[Question 3 related to ${moduleName}]",
+          "options": ["[Option A]", "[Option B]", "[Option C]", "[Option D]"],
+          "correctAnswer": "[Correct Option - e.g., Option A]"
+        },
+        {
+          "question": "[Question 4 related to ${moduleName}]",
+          "options": ["[Option A]", "[Option B]", "[Option C]", "[Option D]"],
+          "correctAnswer": "[Correct Option - e.g., Option D]"
+        },
+        {
+          "question": "[Question 5 related to ${moduleName}]",
+          "options": ["[Option A]", "[Option B]", "[Option C]", "[Option D]"],
+          "correctAnswer": "[Correct Option - e.g., Option B]"
+        }
       ]
     }
 
-  Ensure the entire response is a valid JSON object. The content for 'mainContent' should be rich and detailed, utilizing markdown for structure and readability. Include relevant learning outcomes, key concepts, examples, and activities that are specific to the module '${moduleName}' within the context of the course on '${topic}'. Additionally, provide a 'resources' array containing titles and brief descriptions or links to practice materials, further reading, or interactive exercises related to this module. Aim for at least three helpful resources.`;
+  Ensure the entire response is a valid JSON object. The content for 'mainContent' should be rich and detailed, utilizing markdown for structure and readability. Include relevant learning outcomes, key concepts, examples, and activities that are specific to the module '${moduleName}' within the context of the course on '${topic}'. Additionally, provide a 'resources' array containing titles and brief descriptions or links to practice materials, further reading, or interactive exercises related to this module. Aim for at least three helpful resources. Finally, include a 'quiz' array with exactly 5 multiple-choice questions directly related to the content of this module. Each question should have a 'question' field, an 'options' array with four possible answers, and a 'correctAnswer' field indicating the correct option from the 'options' array.`;
 
   try {
     const result = await model.generateContent(prompt);
