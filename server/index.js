@@ -1,4 +1,3 @@
-// backend/server.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -16,12 +15,12 @@ app.use(express.json());
 
 // API Route
 app.post('/api/generateLearningOutcomes', async (req, res) => {
-  const { topic } = req.body;
+  const { topic, difficulty, estimatedTime } = req.body;
   if(!topic) {
     return res.status(400).json({ error: 'Topic is required' });
   }
   try {
-    const lessonContent = await generateLessonFromAPI(topic);
+    const lessonContent = await generateLessonFromAPI(topic, difficulty, estimatedTime);
     res.json({ content: lessonContent })
   } catch(error) {
     console.error("Error generating lesson:" , error);

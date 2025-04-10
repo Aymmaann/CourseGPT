@@ -6,12 +6,16 @@ dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-export const generateLessonFromAPI = async (topic) => {
+export const generateLessonFromAPI = async (topic, difficulty, estimatedTime) => {
     const prompt = `Generate the initial information for a course on the topic of "${topic}". Please ensure the output adheres to the following format:
 
     **Course Title:** [Compelling Course Title]
 
     **Course Description:** [Concise Course Description]
+
+    **Difficulty Level:** ${difficulty}
+
+    **Estimated Completion Hours:** ${estimatedTime} hours
 
     **Key Course Learning Outcomes:**
 
@@ -29,6 +33,7 @@ export const generateLessonFromAPI = async (topic) => {
     **Module 5:** [Concise Module Title 5]
 
     Replace the bracketed placeholders with content relevant to "${topic}". Maintain the exact markdown formatting, including bold text for headings and module titles, and bullet points for learning outcomes. Ensure each section is separated by one or two newline characters.`;
+
 
     try {
       const result = await model.generateContent(prompt);
@@ -63,10 +68,15 @@ export const generateModuleFromAPI = async (topic, moduleName) => {
       "activities": [
         {"title": "[Engaging Activity 1 for ${moduleName}]", "description": "[Instructions for Activity 1]"},
         {"title": "[Interactive Activity 2 for ${moduleName}]", "description": "[Instructions for Activity 2]"}
+      ],
+      "resources": [
+        {"title": "[Practice Resource Title 1]", "description": "[Brief Description or Link 1]"},
+        {"title": "[Reference Material Title 1]", "description": "[Brief Description or Link 2]"},
+        {"title": "[Interactive Exercise Title 1]", "description": "[Brief Description or Link 3]"}
       ]
     }
 
-  Ensure the entire response is a valid JSON object. The content for 'mainContent' should be rich and detailed, utilizing markdown for structure and readability. Include relevant learning outcomes, key concepts, examples, and activities that are specific to the module '${moduleName}' within the context of the course on '${topic}'.`;
+  Ensure the entire response is a valid JSON object. The content for 'mainContent' should be rich and detailed, utilizing markdown for structure and readability. Include relevant learning outcomes, key concepts, examples, and activities that are specific to the module '${moduleName}' within the context of the course on '${topic}'. Additionally, provide a 'resources' array containing titles and brief descriptions or links to practice materials, further reading, or interactive exercises related to this module. Aim for at least three helpful resources.`;
 
   try {
     const result = await model.generateContent(prompt);
