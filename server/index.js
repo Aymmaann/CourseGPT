@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { generateLessonFromAPI, generateModuleFromAPI } from './controllers/CourseController.js';
-import serverless from 'serverless-http'; 
 
 dotenv.config();
 const app = express();
@@ -14,7 +13,11 @@ app.use(cors({
 app.use(express.json());
 
 
-// API Route
+// API Routes
+app.get('/api', (req,res) => {
+    res.send('API is up and running!')
+})
+
 app.post('/api/generateLearningOutcomes', async (req, res) => {
   const { topic, difficulty, estimatedTime } = req.body;
   if(!topic) {
@@ -45,7 +48,6 @@ app.post('/api/generateModuleContent', async (req,res) => {
 })
 
 
-// app.listen(8001, () => {
-//   console.log('Server running on port 8001');
-// });
-module.exports.handler = serverless(app);
+app.listen(8001, () => {
+  console.log('Server running on port 8001');
+});
