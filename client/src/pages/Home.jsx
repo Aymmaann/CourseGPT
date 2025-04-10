@@ -1,91 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { useNavigate } from 'react-router-dom'
-import { Context } from '../context/CourseContext'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import assets from '../assets/assets.js';
 
 const Home = () => {
-  const { topic, setTopic, lesson, setLesson, loading, setLoading, modules, setModules, setModuleContent, extractModules } = useContext(Context);
-  const [title, setTitle] = useState('')
-  const navigate = useNavigate()
-
-  const handleSubmit = async(e) => {
-    e.preventDefault()
-    console.log("Title: ", title)
-    setTopic(title)
-    localStorage.setItem('topic', title);
-    try {
-        setLoading(true)
-        const response = await fetch('http://localhost:8001/api/generateLearningOutcomes', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ topic: title })
-        })
-        const data = await response.json()
-        console.log(data)
-        setLoading(false)
-        
-        const cleanContent = data.content.replace(/^```|```$/g, '');
-        setLesson(cleanContent)
-        extractModules(cleanContent);
-    } catch(error) {
-        console.error("Error fetching data: ", error)
-    }
-  }
-
-  const handleModuleClick = async(module) => {
-    try {
-      setLoading(true)
-      console.log("Topic: ", topic)
-      console.log("Module: ", module)
-      const response = await fetch('http://localhost:8001/api/generateModuleContent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ topic, module })
-      })
-      const data = await response.json()
-      setModuleContent(data.content)
-    } catch(error) {
-      console.error("Error fetching data: ", error)
-    }
-    setLoading(false)
-  };
-
-  const goToCourse = () => {
-    if(topic) {
-        handleModuleClick(modules[0]); 
-        navigate('/course');
-    } else {
-        console.warn("Topic not yet available, cannot navigate to course.");
-    }
-  }
-
-  useEffect(() => {
-    const storedModules = localStorage.getItem('modules');
-    if (storedModules) {
-      setModules(JSON.parse(storedModules));
-      console.log('Modules loaded from localStorage:', JSON.parse(storedModules));
-    }
-
-    const storedTopic = localStorage.getItem('topic');
-    if (storedTopic) {
-      setTopic(storedTopic);
-      console.log('Topic loaded from localStorage:', storedTopic);
-    }
-  }, [setModules, setTopic]);
-
-
-  useEffect(() => {
-    if (modules.length > 0) {
-      localStorage.setItem('modules', JSON.stringify(modules));
-      console.log('Modules saved to localStorage:', modules);
-    }
-  }, [modules]);
 
   return (
     <div className='w-full h-screen text-zinc-200 bg-darkGray bg-[url("/src/assets/images/home-bg.jpg")] bg-top'>
@@ -163,48 +80,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="p-6 max-w-4xl mx-auto">
-            <form onSubmit={handleSubmit} className="mb-6">
-                <div className="flex gap-2">
-                    <input type="text"
-                        placeholder='Enter a topic...' 
-                        value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
-                        className='outline outline-1 px-3 py-2 rounded-md flex-grow' 
-                    />
-                    <button type='submit' className='bg-red-500 px-5 py-2 rounded-md text-white'>
-                        Submit
-                    </button>
-                </div>
-            </form>
-
-            <div className="mt-4">
-                <h2 className='text-2xl font-semibold mb-4'>Lesson Content</h2>
-                {loading ? (
-                    <p>Loading...</p>
-                ) : lesson ? (
-                    <div className="lesson-content bg-white p-6 rounded-lg shadow">
-                        <div className="prose max-w-none">
-                            <ReactMarkdown>
-                                {lesson}
-                            </ReactMarkdown>
-                        </div>
-                        
-                        <div className="mt-6">
-                            <button 
-                                className='bg-red-500 px-5 py-2 rounded-md text-white' 
-                                onClick={goToCourse}
-                            >
-                                View Course
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <p>Enter a topic to generate lesson content.</p>
-                )}
-            </div>
-        </div> */}
       </div>
     </div>
   )
