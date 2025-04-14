@@ -1,82 +1,88 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import assets from '../assets/assets.js';
+import MainNavbar from '../components/MainNavbar.jsx';
 
 const Home = () => {
 
   return (
-    <div className='w-full h-screen text-zinc-200 bg-darkGray bg-[url("/src/assets/images/home-bg.jpg")] bg-top'>
-      {/* <Navbar /> */}
-      <div className='relative flex items-center justify-between py-5 px-6 text-zinc-300'>
-        <div className='flex gap-2 items-center w-[100px]'>
-            <img src={assets.noBgLogo} alt="" className='w-[25px]'/>
-            <p className='text-lg font-light'>Course<span className='font-semibold'>GPT</span></p>
+    <div className='w-full pb-32 text-zinc-200 overflow-hidden relative bg-darkGray bg-[url("/src/assets/images/home-bg.jpg")] '>
+      {/* Modern geometric shapes background */}
+      {/* <div className="absolute inset-0 overflow-hidden opacity-20">
+        <div className="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-purple-400 blur-3xl"></div>
+        <div className="absolute left-1/3 bottom-0 w-80 h-80 rounded-full bg-indigo-400 blur-3xl"></div>
+        <div className="absolute left-10 top-1/4 w-64 h-64 rounded-full bg-violet-500 blur-3xl"></div>
+      </div> */}
+      
+      <MainNavbar />
+  
+      {/* Hero section */}
+      <div className="max-w-4xl mx-auto mt-16 px-6">
+        {/* Badge */}
+        <div className="flex items-center gap-3 rounded-full bg-[#18153c] p-1.5 pr-5 w-fit mx-auto border border-zinc-700/30">
+          <div className="bg-gradient-to-b from-[#6671ea] to-[#a264e3] text-xs rounded-full py-1 px-3 font-semibold">New</div>
+          <p className="text-xs font-light">Assess Your Learning Progress Instantly</p>
         </div>
-
-        <div>
-            <ul className='flex items-center gap-28 text-sm'>
-            <Link to='/home' className='smoothTransition hover:text-zinc-400'>Home</Link>
-            <Link to='/search' className='smoothTransition hover:text-zinc-400'>Search</Link>
-            <Link to='/courses' className='smoothTransition hover:text-zinc-400'>Courses</Link>
-            </ul>
+  
+        {/* Main heading */}
+        <div className="text-center mt-6">
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-white via-violet-200 to-indigo-200 inline-block text-transparent bg-clip-text">Meet CourseGPT</h1>
+          <p className="font-light mt-6 text-lg text-violet-100 max-w-2xl mx-auto">
+            Advanced learning platform with real-time progress insights. Analyze your understanding and identify focus areas effortlessly.
+          </p>
+          <Link to="/courses">
+            <button className="mt-8 py-2.5 px-6 bg-zinc-200 text-[#262063] cursor-pointer rounded-lg transition-all duration-300 hover:bg-zinc-300 font-medium text-sm shadow-lg shadow-black/20">
+              Get started
+            </button>
+        </Link>
         </div>
-
-        <div className='text-sm flex items-center gap-1 smoothTransition hover:text-zinc-400 cursor-pointer'>
-            <span>Log out</span>
-            <assets.IoMdLogOut className='mt-0.5 text-[16px]' />
-        </div>
-      </div>
-
-
-      <div className='w-[750px] mx-auto mt-20'>
-        <div className='flex items-center gap-3 rounded-2xl bg-[#18153c] p-1 w-[300px] mx-auto'>
-          <div className='bg-gradient-to-b from-[#6671ea] to-[#a264e3] text-xs rounded-xl py-1 px-2 font-semibold'>New</div>
-          <p className='text-xs mr-3 font-light'>Assess Your Learning Progress Instantly</p>
-        </div>
-
-        <div className='text-center mt-7'>
-          <p className='text-5xl font-semibold text-zinc-200'>Meet CourseGPT</p>
-          <p className='font-light mt-6 text-sm'>Advanced learning platform with real-time progress insights. Analyze your understanding and identify focus areas effortlessly.</p>
-          <Link to="/search">
-            <button className='mt-6 py-2 px-4 bg-zinc-200 text-[#262063] rounded-md smoothTransition cursor-pointer font-medium text-sm hover:bg-zinc-300'>Get started</button>
-          </Link>
-        </div>
-
-        <div className='mt-16'>
-          <p className='text-2xl font-semibold'>Why CourseGPT?</p>
-          <div className='flex-col items-center mt-7'>
-            <div className='flex justify-between items-center text-sm w-full'>
-              <div className='flex gap-2 w-[300px]'>
-                <assets.BiSolidAnalyse className='text-violet text-3xl'/>
-                <div className='leading-6'>
-                  <p className='font-semibold mt-1'>Smart Learning Analysis</p>
-                  <p className='text-zinc-400'>Gain insights into your learning progress and identify key areas for focus</p>
+  
+        {/* Features section */}
+        <div className="mt-14">
+          <h2 className="text-2xl font-bold mb-10 text-left">Why CourseGPT?</h2>
+          <div className="grid grid-cols-2 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-gradient-to-br from-[#131627]/70 to-black/80 border border-[#131627]/50 rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group hover:border-[#a392f9]/50">
+              <div className='flex items-center gap-4 mb-4'>
+                <div className="p-2 rounded-xl bg-[#a392f9] text-white font-medium hover:bg-[#8b7ff0] transition-colors w-fit">
+                  <assets.BiSolidAnalyse className="text-violet-400 text-2xl" />
                 </div>
+                <h3 className="font-semibold text-md group-hover:text-violet-300 transition-all duration-300">Smart Learning Analysis</h3>
               </div>
-              <div className='flex gap-2 w-[300px]'>
-                <assets.MdSpatialTracking className='text-[#a392f9] text-3xl'/>
-                <div className='leading-6'>
-                  <p className='font-semibold mt-1'>Progress Tracking in Real-Time</p>
-                  <p className='text-zinc-400'>Monitor your course completion and understanding as you learn</p>
-                </div>
-              </div>
+              <p className="text-violet-200/70 text-sm leading-relaxed">Gain insights into your learning progress and identify key areas for focus</p>
             </div>
-
-            <div className='flex justify-between items-center text-sm w-full mt-7'>
-              <div className='flex gap-2 w-[300px]'>
-                <assets.FaBell className='text-violet text-xl mt-1'/>
-                <div className='leading-6'>
-                  <p className='font-semibold'>Personalized Learning Alerts</p>
-                  <p className='text-zinc-400'>Stay informed about new content, upcoming quizzes, and learning milestones relevant to your journey</p>
+            
+            {/* Feature 2 */}
+            <div className="bg-gradient-to-br from-[#131627]/70 to-black/80 border border-[#131627]/50 rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group hover:border-[#a392f9]/50">
+              <div className='flex items-center gap-4 mb-4'>
+                <div className="p-2 rounded-xl bg-[#a392f9] text-white font-medium hover:bg-[#8b7ff0] transition-colors w-fit">
+                  <assets.MdSpatialTracking className="text-violet-400 text-2xl" />
                 </div>
+                <h3 className="font-semibold text-md group-hover:text-violet-300 transition-all duration-300">Progress Tracking in Real-Time</h3>
               </div>
-              <div className='flex gap-2 w-[300px]'>
-                <assets.FaReact className='text-violet text-3xl'/>
-                <div className='leading-6'>
-                  <p className='font-semibold mt-1'>Intuitive Learning Interface</p>
-                  <p className='text-zinc-400'>Enjoy a seamless and user-friendly platform designed for effortless learning and navigation</p>
+              <p className="text-violet-200/70 text-sm leading-relaxed">Monitor your course completion and understanding as you learn</p>
+            </div>
+            
+            {/* Feature 3 */}
+            <div className="bg-gradient-to-br from-[#131627]/70 to-black/80 border border-[#131627]/50 rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group hover:border-[#a392f9]/50">
+              <div className='flex items-center gap-4 mb-4'>
+                <div className="p-2 rounded-xl bg-[#a392f9] text-white font-medium hover:bg-[#8b7ff0] transition-colors w-fit">
+                  <assets.MdSpatialTracking className="text-violet-400 text-2xl" />
                 </div>
+                <h3 className="font-semibold text-md group-hover:text-violet-300 transition-all duration-300">Personalized Learning Alerts</h3>
               </div>
+              <p className="text-violet-200/70 text-sm leading-relaxed">Stay informed about new content, upcoming quizzes, and learning milestones</p>
+            </div>
+            
+            {/* Feature 4 */}
+            <div className="bg-gradient-to-br from-[#131627]/70 to-black/80 border border-[#131627]/50 rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group hover:border-[#a392f9]/50">
+              <div className='flex items-center gap-4 mb-4'>
+                <div className="p-2 rounded-xl bg-[#a392f9] text-white font-medium hover:bg-[#8b7ff0] transition-colors w-fit">
+                  <assets.MdSpatialTracking className="text-violet-400 text-2xl" />
+                </div>
+                <h3 className="font-semibold text-md group-hover:text-violet-300 transition-all duration-300">Intuitive Learning Interface</h3>
+              </div>
+              <p className="text-violet-200/70 text-sm leading-relaxed">Enjoy a seamless and user-friendly platform designed for effortless learning</p>
             </div>
           </div>
         </div>
